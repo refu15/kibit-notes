@@ -38,8 +38,8 @@
     <hr class="letter-rule">
     <dl class="letter-figures">
       <div><dt>Read</dt><dd>06 articles</dd></div>
-      <div><dt>Years tracked</dt><dd>2017—2026</dd></div>
-      <div><dt>Questions raised</dt><dd>05</dd></div>
+      <div><dt>Hypotheses</dt><dd>05</dd></div>
+      <div><dt>Open questions</dt><dd>05</dd></div>
     </dl>
   </div>
 </section>
@@ -215,10 +215,118 @@
   </div>
 </section>
 
+<!-- ====== 6.5 Hypotheses on KIBIT's design ====== -->
+<section class="letter-section" id="hypotheses">
+  <div class="wrap-narrow">
+    <p class="section-tag">§ 06</p>
+    <h2 class="section-title">KIBIT の設計に関する 5 つの仮説</h2>
+    <p class="lead">
+      内部実装は公開されていないので、公開情報・経歴・NLP の一般理論から推論しました。
+      間違っていたら、対話の中で訂正していただけたら嬉しいです。
+    </p>
+
+    <ol class="hypothesis-list">
+      <li>
+        <span class="hypothesis-num">i</span>
+        <div class="hypothesis-body">
+          <h3>次元数 — Dimension</h3>
+          <div class="hypothesis-meta">
+            <span class="confidence">Confidence</span>
+            <span class="confidence-stars">★★☆</span>
+            <span class="confidence-label">Medium</span>
+          </div>
+          <p class="guess">
+            <em>200〜500 次元</em> と推測します。LLM の embedding が 4096〜12288 次元に肥大化する一方、軽量 NLP は数百次元で十分な解像度を持てる
+            （Johnson-Lindenstrauss 補題）。各次元に解釈を残せるサイズが意図的に選ばれているはずです。
+          </p>
+          <p class="ask">「次元数は数百レベルで合っていますか? 主成分の解釈可能性をどこまで保っていますか?」</p>
+        </div>
+      </li>
+
+      <li>
+        <span class="hypothesis-num">ii</span>
+        <div class="hypothesis-body">
+          <h3>学習方式 — Learning</h3>
+          <div class="hypothesis-meta">
+            <span class="confidence">Confidence</span>
+            <span class="confidence-stars">★★★</span>
+            <span class="confidence-label">High</span>
+          </div>
+          <p class="guess">
+            <em>PMI（または PPMI）行列の SVD 分解 + 論文ネットワーク上のランダムウォーク</em> の組み合わせと推測します。
+            Transformer 不使用・線形代数ベース・Dynamical Systems の専門家 — 三つを満たす最有力候補です。
+            説明可能性が中間項経由で成立する点も整合します。
+          </p>
+          <p class="ask">「Transformer ベースではないとお聞きしました。共起行列の分解 + グラフ上のランダムウォークの組み合わせのような構造をイメージしているのですが、設計思想として近いですか?」</p>
+        </div>
+      </li>
+
+      <li>
+        <span class="hypothesis-num">iii</span>
+        <div class="hypothesis-body">
+          <h3>距離指標 — Distance</h3>
+          <div class="hypothesis-meta">
+            <span class="confidence">Confidence</span>
+            <span class="confidence-stars">★★★</span>
+            <span class="confidence-label">High</span>
+          </div>
+          <p class="guess">
+            <em>コサイン類似度がベース、独自の重み付きスコアで補強</em> と推測します。
+            創薬では「直接の距離」だけでなく「中間項を経由する経路の本数と強さ」が真の有意性を示すはず。
+            複合スコアになっているのではないかと考えています。
+          </p>
+          <p class="ask">「コサイン類似度がベースだと思うのですが、創薬領域では中間項を経由する経路の数や強さが重要ですよね。複合スコアになっているのでしょうか?」</p>
+        </div>
+      </li>
+
+      <li>
+        <span class="hypothesis-num">iv</span>
+        <div class="hypothesis-body">
+          <h3>Long-tail（希少関係）— Rare-pair handling</h3>
+          <div class="hypothesis-meta">
+            <span class="confidence">Confidence</span>
+            <span class="confidence-stars">★★★</span>
+            <span class="confidence-label">High</span>
+          </div>
+          <p class="guess">
+            <em>意図的に拾う設計。ただし複数経路の存在で「ノイズ」と「希少な真実」を区別</em> と推測します。
+            700 → 5 の事例で PubMed 未収載候補が出るのは、低頻度ペアを捨てない設計の証左。
+            多重検定補正やブートストラップでロバスト性を担保している可能性も。
+          </p>
+          <p class="ask">「Long-tail の関係こそが非連続的発見の源だと思うのですが、それをノイズと区別するために複数経路の存在や統計的補正を使っていますか?」</p>
+        </div>
+      </li>
+
+      <li>
+        <span class="hypothesis-num">v</span>
+        <div class="hypothesis-body">
+          <h3>時系列 — Temporal handling</h3>
+          <div class="hypothesis-meta">
+            <span class="confidence">Confidence</span>
+            <span class="confidence-stars">★★☆</span>
+            <span class="confidence-label">Medium</span>
+          </div>
+          <p class="guess">
+            <em>動的ベクトル空間（dynamic embedding）— ベクトル自体が時間の関数として動く設計</em> と推測します。
+            HER2 や Stem Cell のように医学用語の意味は時代で変わる。Dynamical Systems が専門の先生なら、
+            時間発展する系として扱うのが自然な発想に思えます。
+          </p>
+          <p class="ask">「古い論文と新しい論文の意味の違いをどう扱っていますか? 概念ベクトルが時間発展するモデルなら、先生の Dynamical Systems の背景が直接活きそうですが」</p>
+        </div>
+      </li>
+    </ol>
+
+    <p class="hypothesis-note">
+      これらの仮説は、間違っていてくれた方がむしろ嬉しい。<br>
+      訂正の中にこそ、対話の本体があると思っています。
+    </p>
+  </div>
+</section>
+
 <!-- ====== 7. Five questions ====== -->
 <section class="letter-section quiet" id="questions">
   <div class="wrap-narrow">
-    <p class="section-tag">§ 06</p>
+    <p class="section-tag">§ 07</p>
     <h2 class="section-title">議論できたら嬉しい 5 つの問い</h2>
     <p class="lead">
       答えを期待せず、対話のきっかけとして置きます。
@@ -251,7 +359,7 @@
 <!-- ====== 8. Standing invitation ====== -->
 <section class="letter-section closing" id="invitation">
   <div class="wrap-narrow">
-    <p class="section-tag">§ 07</p>
+    <p class="section-tag">§ 08</p>
     <h2 class="section-title">A standing invitation</h2>
     <p class="lead">
       もしご興味があれば、ゆっくり対話の機会をいただけたら嬉しいです。
@@ -275,7 +383,7 @@
 <!-- ====== 9. References ====== -->
 <section class="letter-section refs" id="references">
   <div class="wrap-narrow">
-    <p class="section-tag">§ 08</p>
+    <p class="section-tag">§ 09</p>
     <h2 class="section-title">References</h2>
     <p class="lead">公開情報のみを参照しています。</p>
     <ol class="letter-ref-list">

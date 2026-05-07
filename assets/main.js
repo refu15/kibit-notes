@@ -20,7 +20,8 @@
   // Reveal on scroll (subtle)
   const targets = document.querySelectorAll(
     '.section-title, .lead, .long-list li, .parallel-table, .bring, ' +
-    '.learn-list li, .question-list li, .invitation-rules, .signoff, ' +
+    '.learn-list li, .hypothesis-list li, .hypothesis-note, ' +
+    '.question-list li, .invitation-rules, .signoff, ' +
     '.letter-ref-list, .letter-figures, .letter-sub'
   );
   targets.forEach(el => el.classList.add('reveal'));

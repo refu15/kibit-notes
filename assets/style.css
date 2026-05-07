@@ -364,6 +364,103 @@ img { display: block; max-width: 100%; }
   color: var(--ink-soft);
 }
 
+/* hypotheses */
+.hypothesis-list {
+  list-style: none;
+  margin: 32px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--ink);
+}
+.hypothesis-list li {
+  padding: 36px 0;
+  border-bottom: 1px solid var(--ink);
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.hypothesis-num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(36px, 4vw, 48px);
+  color: var(--mute);
+  font-weight: 500;
+  line-height: 1;
+  padding-top: 6px;
+}
+.hypothesis-body h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(22px, 2.1vw, 28px);
+  margin: 0 0 14px;
+  line-height: 1.25;
+}
+.hypothesis-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.confidence {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.confidence-stars {
+  font-family: var(--serif);
+  font-size: 16px;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+.confidence-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mute);
+  border: 1px solid var(--mute);
+  padding: 2px 8px;
+}
+.hypothesis-body p.guess {
+  margin: 0 0 18px;
+  font-size: clamp(15px, 1.5vw, 17px);
+  line-height: 1.75;
+  color: var(--ink-soft);
+}
+.hypothesis-body p.guess em {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--ink);
+}
+.hypothesis-body p.ask {
+  margin: 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(16px, 1.5vw, 18px);
+  line-height: 1.6;
+  color: var(--ink);
+  padding: 14px 0 14px 22px;
+  border-left: 2px solid var(--ink);
+}
+.hypothesis-note {
+  margin-top: 48px;
+  padding: 24px 0 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(17px, 1.6vw, 20px);
+  line-height: 1.65;
+  color: var(--ink-soft);
+  text-align: center;
+  border-top: 1px dashed var(--mute);
+}
+@media (max-width: 600px) {
+  .hypothesis-list li { grid-template-columns: 1fr; gap: 12px; }
+  .hypothesis-num { padding-top: 0; }
+}
+
 /* questions */
 .letter-section.quiet {
   background: var(--paper-pure);
