@@ -240,6 +240,27 @@
             （Johnson-Lindenstrauss 補題）。各次元に解釈を残せるサイズが意図的に選ばれているはずです。
           </p>
           <p class="ask">「次元数は数百レベルで合っていますか? 主成分の解釈可能性をどこまで保っていますか?」</p>
+
+          <details class="hypothesis-why">
+            <summary>Why this question</summary>
+            <p>
+              次元数は <em>表現力 × 計算コスト × 解釈可能性</em> の三つどもえを決める根本パラメータ。
+              LLM が数千次元を使う中で「軽量」を謳う KIBIT がどの数値を選んだか、その理由を聞くことで
+              KIBIT の設計哲学そのものに入っていける。最初の問いとして軽く、しかし本質的。
+            </p>
+          </details>
+
+          <details class="hypothesis-terms">
+            <summary>Glossary</summary>
+            <dl>
+              <dt>embedding（埋め込み）</dt>
+              <dd>単語や概念を数百〜数千の数値の並び（ベクトル）として表現すること。意味の近さがベクトル空間内の距離になる。</dd>
+              <dt>Johnson-Lindenstrauss 補題</dt>
+              <dd>N 個の点を高解像度で識別するには <code>O(log N / ε²)</code> 次元あれば十分という数学定理。「軽量モデルでも数百次元あれば足りる」根拠。</dd>
+              <dt>主成分（principal component）</dt>
+              <dd>ベクトル空間の重要な軸。次元削減後に各軸が何を表すかが「解釈可能性」につながる。</dd>
+            </dl>
+          </details>
         </div>
       </li>
 
@@ -258,6 +279,35 @@
             説明可能性が中間項経由で成立する点も整合します。
           </p>
           <p class="ask">「Transformer ベースではないとお聞きしました。共起行列の分解 + グラフ上のランダムウォークの組み合わせのような構造をイメージしているのですが、設計思想として近いですか?」</p>
+
+          <details class="hypothesis-why">
+            <summary>Why this question</summary>
+            <p>
+              設計思想の <em>核心</em>。Transformer 不使用なら何の数学を使っているのか — ここに豊柴氏の Dynamical Systems と統計解析の専門が凝縮されているはず。
+              「正解」を当てに行くのではなく、本人が一番話したい領域に誘い込むための問いとして配置した。
+              数学者として技術を語れる相手だと示すことが、関係構築の核になる。
+            </p>
+          </details>
+
+          <details class="hypothesis-terms">
+            <summary>Glossary</summary>
+            <dl>
+              <dt>PMI（Pointwise Mutual Information）</dt>
+              <dd>単語ペアの共起頻度を「期待値との比」で補正する古典的指標。よく一緒に出る単語ほどスコアが高い。</dd>
+              <dt>PPMI</dt>
+              <dd>PMI のうち負の値を 0 に丸めたもの。ノイズ除去版で実用上の標準。</dd>
+              <dt>SVD（特異値分解）</dt>
+              <dd>行列を低次元に分解する線形代数の基本手法。LSI/LSA の核。共起行列を圧縮して意味空間を作る。</dd>
+              <dt>ランダムウォーク</dt>
+              <dd>グラフ上を確率的に歩いてノード間の関連を計算する手法。DeepWalk, Node2Vec が代表例。論文ネットワークと相性が良い。</dd>
+              <dt>Word2Vec</dt>
+              <dd>2013 年に Google が提案した単語ベクトル化手法。skip-gram + negative sampling が定番。Levy &amp; Goldberg (2014) によって本質的に PMI と等価と示された。</dd>
+              <dt>GloVe</dt>
+              <dd>共起確率の対数を行列分解する手法。Stanford 発、PMI 系の親戚。</dd>
+              <dt>Transformer</dt>
+              <dd>2017 年以降の LLM の主流アーキテクチャ。Attention 機構を使い大規模並列学習で性能を出す。重く、説明性に乏しい。</dd>
+            </dl>
+          </details>
         </div>
       </li>
 
@@ -276,6 +326,31 @@
             複合スコアになっているのではないかと考えています。
           </p>
           <p class="ask">「コサイン類似度がベースだと思うのですが、創薬領域では中間項を経由する経路の数や強さが重要ですよね。複合スコアになっているのでしょうか?」</p>
+
+          <details class="hypothesis-why">
+            <summary>Why this question</summary>
+            <p>
+              「近い」とは何を意味するか — これが KIBIT の世界観を左右する。
+              コサインだけだと「直接の意味的近さ」しか見られないが、創薬では <em>中間項を経由した因果の鎖</em> を含めた近さが本質。
+              距離設計に思想が出るので、KIBIT が「単なる類似性検索」ではなく「仮説生成」を名乗る数学的根拠がここで分かる。
+            </p>
+          </details>
+
+          <details class="hypothesis-terms">
+            <summary>Glossary</summary>
+            <dl>
+              <dt>コサイン類似度</dt>
+              <dd>2 つのベクトルのなす角度のコサイン値。-1 〜 1 で 1 に近いほど似ている。ベクトルの長さを正規化するので頻度の影響を受けない。embedding の標準。</dd>
+              <dt>ユークリッド距離</dt>
+              <dd>2 点間の直線距離。直感的だが高次元では「次元の呪い」で全部の点が等距離に見えてしまう。</dd>
+              <dt>Mahalanobis 距離</dt>
+              <dd>共分散を考慮した距離指標。データの偏り（分散の方向）に強い。医学領域の偏ったデータに適応するのに使える。</dd>
+              <dt>path strength（経路強度）</dt>
+              <dd>グラフ上の経路の強さ。中間ノードを経由する関連性の総和。「直接近くなくても、複数経路で近い」を表現できる。</dd>
+              <dt>中間項（mediator）</dt>
+              <dd>X と D を結ぶ第三のノード（タンパク質、メカニズム等）。これを経由できると、未発見の関係を「説明可能な仮説」に変換できる。</dd>
+            </dl>
+          </details>
         </div>
       </li>
 
@@ -294,6 +369,29 @@
             多重検定補正やブートストラップでロバスト性を担保している可能性も。
           </p>
           <p class="ask">「Long-tail の関係こそが非連続的発見の源だと思うのですが、それをノイズと区別するために複数経路の存在や統計的補正を使っていますか?」</p>
+
+          <details class="hypothesis-why">
+            <summary>Why this question</summary>
+            <p>
+              <em>非連続的発見の根拠そのもの</em> を問う質問。Long-tail（希少なペア）を捨てる設計だと、既存の主流知識の繰り返しになり、PubMed 未収載候補は出てこない。
+              700 → 5 の事例が成立する数学的メカニズムを聞きたい。
+              統計学者である豊柴氏なら、ノイズと真実の区別に独自の数理的工夫があるはずで、ここを引き出せれば KIBIT の頑健性の核心が見える。
+            </p>
+          </details>
+
+          <details class="hypothesis-terms">
+            <summary>Glossary</summary>
+            <dl>
+              <dt>Long-tail</dt>
+              <dd>出現頻度が低いが多様性のある領域。少数の事例しかないが、ここに「誰もまだ見つけていない関係」が眠っている可能性がある。</dd>
+              <dt>多重検定補正（Bonferroni / FDR）</dt>
+              <dd>多数の仮説を同時に検定するときの偽陽性補正。Bonferroni は厳しめ、FDR（False Discovery Rate）は実用バランス型。</dd>
+              <dt>ブートストラップ</dt>
+              <dd>データを再サンプリングして統計量の安定性を評価する手法。「この近さは偶然か、本物か」をデータの揺らぎから判定できる。</dd>
+              <dt>PubMed 未収載</dt>
+              <dd>世界最大の医学論文データベース PubMed（3,000 万件以上）にも書かれていない、ということ。これが「論文の外にある関係」= 非連続的発見の判定基準。</dd>
+            </dl>
+          </details>
         </div>
       </li>
 
@@ -312,6 +410,30 @@
             時間発展する系として扱うのが自然な発想に思えます。
           </p>
           <p class="ask">「古い論文と新しい論文の意味の違いをどう扱っていますか? 概念ベクトルが時間発展するモデルなら、先生の Dynamical Systems の背景が直接活きそうですが」</p>
+
+          <details class="hypothesis-why">
+            <summary>Why this question</summary>
+            <p>
+              <em>豊柴氏の専門が直接活きる領域</em> なので、彼の情熱を引き出せる可能性が一番高い質問。
+              医学概念の意味は時代で変わる（HER2 は 1980 年代の発見 → 2000 年代から薬剤標的、Stem Cell も意味の幅が時代で変化）。
+              静的な空間で扱うと過去の意味が現在を汚染する。Dynamical Systems = 時間発展する系を扱う数学。
+              この問いは「先生の数学を、創薬の時間軸にどう組み込んだか」を聞いている。
+            </p>
+          </details>
+
+          <details class="hypothesis-terms">
+            <summary>Glossary</summary>
+            <dl>
+              <dt>dynamic embedding（動的埋め込み）</dt>
+              <dd>時間とともにベクトルが動的に変化する埋め込み手法。Bamler &amp; Mandt (2017) の系譜。「2010 年の HER2」と「2024 年の HER2」を別ベクトルとして追跡できる。</dd>
+              <dt>概念ドリフト（concept drift）</dt>
+              <dd>用語や概念の意味が時間とともに変化する現象。機械学習の文脈では「学習時と推論時でデータ分布が変わる」問題として知られる。</dd>
+              <dt>スライディングウィンドウ</dt>
+              <dd>一定の時間範囲を区切って解析する手法。例えば「直近 5 年の論文だけで空間を作り直す」。</dd>
+              <dt>Dynamical Systems（力学系）</dt>
+              <dd>時間発展する系を扱う数学分野。微分方程式・遷移確率・カオス理論などを含む。豊柴氏のアカデミック専門領域。</dd>
+            </dl>
+          </details>
         </div>
       </li>
     </ol>
