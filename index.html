@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Notes on Non-Discontinuous Discovery — AI 創薬と現場 AI 実装の交差点に関する公開リサーチノート">
+<title>Notes on Non-Discontinuous Discovery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="letter">
+
+<div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+<header class="letter-header">
+  <div class="wrap-narrow">
+    <p class="letter-tag">Reading note &middot; May 2026</p>
+  </div>
+</header>
+
+<main class="letter-main" id="top">
+
+<!-- ====== 1. Cover ====== -->
+<section class="letter-hero">
+  <div class="wrap-narrow">
+    <p class="letter-eyebrow">A reading note from the AI field</p>
+    <h1 class="letter-title">
+      Notes on<br>
+      <em>Non-Discontinuous</em><br>
+      Discovery.
+    </h1>
+    <p class="letter-sub">
+      公開記事に繰り返し現れる「非連続的発見」という言葉を、現場 AI 実装側から読み返した記録。
+      売り込みではなく、議論の準備として書きました。
+    </p>
+    <hr class="letter-rule">
+    <dl class="letter-figures">
+      <div><dt>Read</dt><dd>06 articles</dd></div>
+      <div><dt>Years tracked</dt><dd>2017—2026</dd></div>
+      <div><dt>Questions raised</dt><dd>05</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ====== 2. Premise ====== -->
+<section class="letter-section" id="premise">
+  <div class="wrap-narrow">
+    <p class="section-tag">§ 01</p>
+    <h2 class="section-title">なぜこの note を書いたか</h2>
+    <p class="lead">
+      日経 2026-03-30、日経サイエンス 2024-02、xTECH の事業拡大記事 — 公開された言葉を順に追うと、
+      ひとつの一貫した姿勢が浮かび上がります。
+      「AI による創薬は、米欧でも周回遅れの日本でも、まだ画期的な新薬を生んでいない。鍵は <em>非連続的発見</em> にある。」
+    </p>
+    <p>
+      この観察は、創薬の外側 — 介護・医療・自治体の DX — で AI を実装している人間にも刺さりました。
+      フロンティアモデル（Claude Opus 4.7、GPT-5.4、Gemini 3.1）を毎週評価していると、
+      「既知の補間」は劇的に良くなる一方、「飛躍」は依然として人間か特殊なアーキテクチャを必要とすると感じます。
+    </p>
+    <p>
+      公開された情報を真面目に読むことが、敬意の最低条件だと考えています。
+      会いに行く前に、こちら側で読んだことと考えたことを、ひととおり並べておきたい。
+      それがこの note の目的です。
+    </p>
+  </div>
+</section>
+
+<!-- ====== 3. What we read ====== -->
+<section class="letter-section" id="what-we-read">
+  <div class="wrap-narrow">
+    <p class="section-tag">§ 02</p>
+    <h2 class="section-title">公開記事から抽出した 6 つの論点</h2>
+    <ol class="long-list">
+      <li>
+        <h3>i. 非連続的発見</h3>
+        <p>「AI 創薬の本質は補間ではなく飛躍にある」 — 周回遅れの日本がそれでも追い越せる根拠として、繰り返し語られている。</p>
+      </li>
+      <li>
+        <h3>ii. EROOM の法則</h3>
+        <p>創薬コストが約 9 年で倍増する経験則。2010 年代以降の研究開発成功率の停滞を示し、AI 投入の必然性を裏付ける。</p>
+      </li>
+      <li>
+        <h3>iii. メカニズム理解の優先</h3>
+        <p>「メカニズムまで分からなければ研究が進まない」 — 単なるスクリーニングではなく、なぜ効くかの仮説生成が AI に求められている。</p>
+      </li>
+      <li>
+        <h3>iv. 軽量 NLP のオリジナル路線</hh3>
+        <p>大規模言語モデルが肥大化する潮流の中で、KIBIT はあえて軽量・高性能を志向。数学的アプローチで意味を扱う設計思想。</p>
+      </li>
+      <li>
+        <h3>v. 標的分子探索という未開拓地</h3>
+        <p>化合物のバーチャルスクリーニングは AI 化が進む一方、最重要工程である標的分子の選定は依然として AI 化が浅い。Drug Discovery AI Factory はそこを狙う。</p>
+      </li>
+      <li>
+        <h3>vi. 実証された絞り込み</h3>
+        <p>700 → 100 → 20 → 5。PubMed 未収載の候補の中から細胞レベルで薬効が認められた事例。仮説生成型 AI のひとつの到達点。</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ====== 4. What we share ====== -->
+<section class="letter-section dark" id="what-we-share">
+  <div class="wrap-narrow">
+    <p class="section-tag inv">§ 03</p>
+    <h2 class="section-title">領域は違う、でも構造は同じ</h2>
+    <p class="lead">
+      創薬と介護現場は、表層では遠い。だが構造を見ると、驚くほど似ている。
+    </p>
+
+    <div class="parallel-table">
+      <div class="parallel-row head">
+        <div>論点</div>
+        <div>創薬 (FRONTEO の文脈)</div>
+        <div>現場 AI 実装 (我々の文脈)</div>
+      </div>
+      <div class="parallel-row">
+        <div>本質課題</div>
+        <div>標的分子の<em>選定</em></div>
+        <div>暗黙ルールの<em>言語化</em></div>
+      </div>
+      <div class="parallel-row">
+        <div>失敗の構造</div>
+        <div>EROOM の法則</div>
+        <div>導入後の Excel 復帰現象</div>
+      </div>
+      <div class="parallel-row">
+        <div>AI 単独の限界</div>
+        <div>LLM はメカニズムを理解しない</div>
+        <div>LLM はハード制約を厳密に解けない</div>
+      </div>
+      <div class="parallel-row">
+        <div>必要な統合</div>
+        <div>軽量 NLP × 専門家評価</div>
+        <div>制約ソルバー × LLM 評価器</div>
+      </div>
+      <div class="parallel-row">
+        <div>非連続性の源</div>
+        <div>論文に書かれていない関係</div>
+        <div>シフト履歴に隠れた制約</div>
+      </div>
+    </div>
+
+    <p class="aside-inv">
+      「非連続的発見」を中心に置くと、創薬と現場 DX は同じゲームの別ルールに見えてきます。
+      <br>—— だからこそ、この対話の意味があると考えました。
+    </p>
+  </div>
+</section>
+
+<!-- ====== 5. What we might bring ====== -->
+<section class="letter-section" id="what-we-bring">
+  <div class="wrap-narrow">
+    <p class="section-tag">§ 04</p>
+    <h2 class="section-title">こちらから持ち寄れること</h2>
+    <p class="lead">
+      お役に立てるとは限りません。ただ、もし共通項があれば差し出せるものを 4 つ並べます。
+    </p>
+    <div class="bring-list">
+      <div class="bring">
+        <p class="bring-num">01</p>
+        <h3>Frontier model field reports</h3>
+        <p>Claude Opus 4.7 / GPT-5.4 / Gemini 3.1 を毎週評価し、コスト・推論精度・<em>飛躍</em>の傾向を記録しています。
+        ライフサイエンス領域で使えるかどうかの現場感を共有できます。</p>
+      </div>
+      <div class="bring">
+        <p class="bring-num">02</p>
+        <h3>UX for constrained environments</h3>
+        <p>介護現場で実装している「両手塞がり・手袋着用・片手タップ」前提の体験設計。
+        研究者が KIBIT の出力をどう <em>触る</em> かに、転用できる発想があるかもしれません。</p>
+      </div>
+      <div class="bring">
+        <p class="bring-num">03</p>
+        <h3>Live prototype velocity</h3>
+        <p>仮説をその場で動くコードに落とす速度。創薬の議論で「こういう操作感はどう？」と見せられる小型ツールを、対話の中で組み立てられます。</p>
+      </div>
+      <div class="bring">
+        <p class="bring-num">04</p>
+        <h3>Multi-vendor AI router</h3>
+        <p>マルチプロバイダ運用とコスト管理 — 月額キャップを設計し、自動フォールバックを実装した経験。
+        複数モデルの混在運用に課題を感じている場面で参考になるかもしれません。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. What we want to learn ====== -->
+<section class="letter-section" id="what-we-learn">
+  <div class="wrap-narrow">
+    <p class="section-tag">§ 05</p>
+    <h2 class="section-title">こちらが学びたいこと</h2>
+    <p class="lead">
+      対話の半分は、教わる側として。記事から読み取れない 4 つの質問があります。
+    </p>
+    <ol class="learn-list">
+      <li>
+        <h3>i. KIBIT が「概念」を扱う数学</h3>
+        <p>大規模 LLM が embedding で意味を扱う中、軽量モデルで意味空間を構築するアプローチの数学的核心。</p>
+      </li>
+      <li>
+        <h3>ii. 700 → 5 の絞り込みプロセス</h3>
+        <p>機械が出した 100 候補から人間が 20 を選ぶときの判断材料は何か。AI に <em>任せきれない</em> 工程の解像度。</p>
+      </li>
+      <li>
+        <h3>iii. 製薬企業との PoC の最初の 3 ヶ月</h3>
+        <p>受託型のサービスで「期待値の整合」をどう設計しているか。介護法人との PoC 設計に直接転用したい知見。</p>
+      </li>
+      <li>
+        <h3>iv. LLM とのハイブリッドの境界</h3>
+        <p>軽量モデルと汎用 LLM をどう責務分離するか。創薬と現場 AI、両領域で同じ問いを持っています。</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ====== 7. Five questions ====== -->
+<section class="letter-section quiet" id="questions">
+  <div class="wrap-narrow">
+    <p class="section-tag">§ 06</p>
+    <h2 class="section-title">議論できたら嬉しい 5 つの問い</h2>
+    <p class="lead">
+      答えを期待せず、対話のきっかけとして置きます。
+    </p>
+    <ol class="question-list">
+      <li>
+        <span class="q-num">Q1</span>
+        <p><em>非連続的発見</em>は、モデル設計から生まれるのでしょうか、それとも人間の介在から生まれるのでしょうか。両者の比率を分けて語れるとすれば、どのあたりに線が引かれますか。</p>
+      </li>
+      <li>
+        <span class="q-num">Q2</span>
+        <p>EROOM の法則は AI で本当に逆転するのか。それとも、規制や臨床試験設計のような <em>非モデル要因</em> の刷新なしには逆転しないのか。</p>
+      </li>
+      <li>
+        <span class="q-num">Q3</span>
+        <p>標的分子探索のワークフローで、最も「AI に任せきれない」工程はどこですか。そこを言語化できれば、他領域でも同じ問いを立てられるはずです。</p>
+      </li>
+      <li>
+        <span class="q-num">Q4</span>
+        <p>軽量モデルとフロンティア LLM のハイブリッドは、どの境界で責務分離するのが理想でしょうか。我々はハード制約 vs 暗黙ルールで分けていますが、創薬の文脈ではどう切れるのか。</p>
+      </li>
+      <li>
+        <span class="q-num">Q5</span>
+        <p>ライフサイエンスの AI 倫理は、技術設計にどう組み込まれるべきでしょうか。「説明可能性」だけでは足りない実感が、現場で確かにあります。</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ====== 8. Standing invitation ====== -->
+<section class="letter-section closing" id="invitation">
+  <div class="wrap-narrow">
+    <p class="section-tag">§ 07</p>
+    <h2 class="section-title">A standing invitation</h2>
+    <p class="lead">
+      もしご興味があれば、ゆっくり対話の機会をいただけたら嬉しいです。
+    </p>
+    <ul class="invitation-rules">
+      <li>受注の話は持参しません。</li>
+      <li>事前に何かをお願いすることもありません。</li>
+      <li>その場で動くものをお見せできる準備だけは、いつでも整えておきます。</li>
+      <li>こちらが何かをお返しできる関係になれたら、それで十分です。</li>
+    </ul>
+    <p class="signoff">
+      この note は、対話の<em>準備</em>として書きました。
+      <br>会話のあとで、書き直すかもしれません。
+    </p>
+    <p class="signoff-meta">
+      — May 2026, Tokyo
+    </p>
+  </div>
+</section>
+
+<!-- ====== 9. References ====== -->
+<section class="letter-section refs" id="references">
+  <div class="wrap-narrow">
+    <p class="section-tag">§ 08</p>
+    <h2 class="section-title">References</h2>
+    <p class="lead">公開情報のみを参照しています。</p>
+    <ol class="letter-ref-list">
+      <li><a href="https://www.nikkei.com/article/DGKKZO95276100X20C26A3TCT000/">日本経済新聞 2026-03-30 — AI 創薬の実力は 非連続的発見こそ大切</a></li>
+      <li><a href="https://www.nikkei.com/article/DGXZQOCD208YD0Q6A220C2000000/">日本経済新聞 — AI 創薬の実力引き出せ データ生かし、有力候補を素早く</a></li>
+      <li><a href="https://www.nikkei-science.com/202402_014.html">日経サイエンス 2024-02 — 「言葉の AI」数学で磨く 創薬や診断を強力支援</a></li>
+      <li><a href="https://xtech.nikkei.com/atcl/nxt/column/18/00001/08470/">日経 xTECH — AI 創薬で 100 億円を目指す、FRONTEO が「仮説生成」を強みに事業拡大</a></li>
+      <li><a href="https://bio.nikkeibp.co.jp/atcl/news/p1/25/03/20/13108/">日経バイオテク — AI による新たな創薬仮説に検証データを付けて提案していく</a></li>
+      <li><a href="https://lifescience.fronteo.com/toyoshiba">FRONTEO Life Science — リサーチノートの参考ページ</a></li>
+      <li><a href="https://www.r-ccs.riken.jp/newsletter/201311/interview.html">理化学研究所 R-CCS — 創薬に計算科学を徹底利用</a></li>
+      <li><a href="https://www.aist.go.jp/aist_j/magazine/20250212.html">産総研 — AI 創薬とは？</a></li>
+      <li><a href="https://www.cas.go.jp/jp/seisaku/souyakuryoku/dai1/siryou4.pdf">内閣官房 — 日本の創薬力強化に向けた課題と具体的な強化策</a></li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+<footer class="letter-footer">
+  <div class="wrap-narrow">
+    <p class="colophon-letter">
+      Set in Cormorant Garamond, Inter, Noto Serif JP &amp; JetBrains Mono.<br>
+      A static reading note. No tracking. No analytics.
+    </p>
+  </div>
+</footer>
+
+<script src="assets/main.js"></script>
+</body>
+</html>
